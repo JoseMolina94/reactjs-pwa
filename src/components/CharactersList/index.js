@@ -4,10 +4,10 @@ import {CharacterCard} from "../CharacterCard";
 
 export const CharactersList = ({
   characters = [],
-  loading = false
+  loading = false,
+  setCharacterSelected = (character) => {}
 }) => {
 
-  console.log(characters)
   return ( !loading &&
     <div className="container" >
       {
@@ -15,6 +15,7 @@ export const CharactersList = ({
           <CharacterCard
             {...character}
             key={index}
+            characterSelectFunc={() => setCharacterSelected(character)}
           />
         ))
       }

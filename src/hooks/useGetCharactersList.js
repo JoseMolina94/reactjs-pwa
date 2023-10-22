@@ -1,7 +1,9 @@
 import {useEffect, useState} from "react"
+import { getVisualizationStatistics } from "../utils/getVisualizationStatistics";
 
 export const useGetCharactersList = () => {
   const [charactersList, setCharactersList] = useState([])
+  const [visualizationStatistics, setVisualizationStatitics] = useState([])
   const [queryInfo, setQueryInfo] = useState({})
   const [loadingCharactersList, setLoadingCharactersList] = useState(true)
   const initialURL = "https://rickandmortyapi.com/api/character"
@@ -14,6 +16,15 @@ export const useGetCharactersList = () => {
         .then(data => {
           setQueryInfo(data.info)
           setCharactersList(data.results)
+
+          setVisualizationStatitics(
+            getVisualizationStatistics({
+              dataArray: data.results,
+              name: 'visualization',
+              value: 'episode'
+            })
+          )
+
           setLoadingCharactersList(false)
         })
     } catch (e) {
@@ -42,6 +53,7 @@ export const useGetCharactersList = () => {
     charactersList,
     loadingCharactersList,
     previousPage,
-    nextPage
+    nextPage,
+    visualizationStatistics
   }
 }

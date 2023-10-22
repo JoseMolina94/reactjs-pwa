@@ -1,6 +1,7 @@
 import React from "react"
-import "./style.css"
 import { MdMale, MdFemale } from "react-icons/md"
+import { getStatusStyle } from "../../utils/generals";
+import "./style.css"
 
 export const CharacterCard = (props) => {
   const {
@@ -9,30 +10,14 @@ export const CharacterCard = (props) => {
     species,
     type,
     gender,
-    status
+    status,
+    characterSelectFunc = () => {}
   } = props
-
-  const getStatusStyle = () => {
-    switch (status) {
-      case "Alive":
-        return {
-          color: "green"
-        }
-      case "Dead":
-        return {
-          color: "red"
-        }
-
-      default:
-        return {
-          color: "white"
-        }
-    }
-  }
 
   return (
     <div
       className="card"
+      onClick={characterSelectFunc}
     >
       <div
         className="character-img"
@@ -58,7 +43,7 @@ export const CharacterCard = (props) => {
           {species} { type && `(${type})` }
         </p>
         <p className="character-status">
-          Status: <strong style={getStatusStyle()}> {status} </strong>
+          Status: <strong style={getStatusStyle(status)}> {status} </strong>
         </p>
       </div>
     </div>
