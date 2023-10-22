@@ -1,38 +1,114 @@
-import React from "react"
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
-import "./styles.css"
+import React, { useLayoutEffect, useState, useRef } from "react"
+import * as am5 from "@amcharts/amcharts5"
+import * as am5xy from "@amcharts/amcharts5/xy"
+import am5themes_Animated from "@amcharts/amcharts5/themes/Animated"
 
 export const StatisticsBars = (props) => {
   const {
-    type = 'XYChart',  //Puede ser XYChart, PieChart
     data = [],
     category = 'data',
-    categoryTitle = 'Category',
-    valueTitle = 'Value',
     value = 'data',
-    useImage = false,
-    image = ''
+    currentSelect = null
   } = props
-  let chart = am4core.create("chartdiv", am4charts[type])
-  chart.data = data
+  const series1Ref = useRef(null)
+  const xAxisRef = useRef(null)
 
-  let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis())
-  categoryAxis.dataFields.category = category
-  categoryAxis.title.text = categoryTitle;
+  useLayoutEffect(() => {
+    /* Chart code */
+    // Create root element
+    let root = am5.Root.new("chartdiv");
 
-  let valueAxis = chart.yAxes.push(new am4charts.ValueAxis())
-  valueAxis.title.text = valueTitle
 
-  let series = chart.series.push(new am4charts.ColumnSeries())
-  series.dataFields.valueY = value
-  series.dataFields.categoryX = category
+    // Set themes
+    root.setThemes([
+      am5themes_Animated.new(root)
+    ]);
 
-  series.name = valueTitle;
-  series.columns.template.tooltipText = "Character: {categoryX}\nVisualizations: {valueY}";
-  series.columns.template.fill = am4core.color("#104547"); // fill
+    // Create chart
+    let chart = root.container.children.push(am5xy.XYChart.new(root, {
+      panX: true,
+      panY: false,
+      wheelX: "panX",
+      wheelY: "zoomX",
+      layout: root.verticalLayout
+    }));
+
+
+    // Create axes
+    let xRenderer = am5xy.AxisRendererX.new(root, {
+      minGridDistance: 30
+    })
+    xRenderer.labels.template.setAll({
+      visible: false
+    });
+
+    let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+      categoryField: category,
+      renderer: xRenderer,
+      bullet: function(root, axis, dataItem) {
+        return am5xy.AxisBullet.new(root, {
+          location: 0.5,
+          sprite: am5.Picture.new(root, {
+            width: 24,
+            height: 24,
+            centerX: am5.p50,
+            src: dataItem.dataContext.imageSettings.src
+          })
+        });
+      }
+    }));
+
+    xRenderer.grid.template.setAll({
+      location: 1
+    })
+
+    xRenderer.labels.template.setAll({
+      paddingTop: 20
+    });
+
+    xAxis.data.setAll(data);
+
+    let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+      renderer: am5xy.AxisRendererY.new(root, {
+        strokeOpacity: 0.1
+      })
+    }));
+
+    // Add series
+    let series = chart.series.push(am5xy.ColumnSeries.new(root, {
+      xAxis: xAxis,
+      yAxis: yAxis,
+      valueYField: value,
+      categoryXField: category
+    }));
+
+    series.columns.template.setAll({
+      tooltipText: "{categoryX}: {valueY}",
+      tooltipY: 0,
+      strokeOpacity: 0
+    });
+
+    series.data.setAll(data);
+
+
+    // Make stuff animate on load
+    series.appear();
+    chart.appear(1000, 100);
+
+    xAxisRef.current = xAxis
+    series1Ref.current = series
+
+    return () => {
+      root.dispose()
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    xAxisRef.current.data.setAll(data);
+    series1Ref.current.data.setAll(data);
+  }, [data]);
 
   return (
-    <div id="chartdiv" />
+    <div id="chartdiv" style={{ width: '100%', height: '280px', overflow: 'auto' }} />
   )
 }

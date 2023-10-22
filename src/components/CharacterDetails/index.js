@@ -71,9 +71,9 @@ export const CharacterDetails = (props) => {
           category="name"
           categoryTitle="Character"
           valueTitle="Visualization"
-          useImage
-          image={character.image}
+          currentSelect={character}
         />
+
       </div>
     </div>
   )

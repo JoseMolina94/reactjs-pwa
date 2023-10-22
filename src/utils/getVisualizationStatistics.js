@@ -17,7 +17,9 @@ export const getVisualizationStatistics = ({
       [name]: item[value].length,
       id: item.id,
       name: item.name,
-      image: item?.image || ""
+      imageSettings: {
+        src: item?.image || ""
+      }
     })
   }
 
