@@ -54,10 +54,16 @@
 
 .male {
     background: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .female {
     background: deeppink;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @keyframes enter {

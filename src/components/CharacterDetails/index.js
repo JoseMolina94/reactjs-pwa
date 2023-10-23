@@ -12,8 +12,6 @@ export const CharacterDetails = (props) => {
     visualizationStatistics
   } = props
 
-  console.log('CHAR', character, visualizationStatistics)
-
   return (
     <div className="details-character-container">
       <div className="character-info-container" >

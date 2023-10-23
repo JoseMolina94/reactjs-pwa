@@ -5,6 +5,7 @@ export const useGetCharactersList = () => {
   const [charactersList, setCharactersList] = useState([])
   const [visualizationStatistics, setVisualizationStatitics] = useState([])
   const [queryInfo, setQueryInfo] = useState({})
+  const [page, setPage] = useState(1)
   const [loadingCharactersList, setLoadingCharactersList] = useState(true)
   const initialURL = "https://rickandmortyapi.com/api/character"
 
@@ -35,12 +36,14 @@ export const useGetCharactersList = () => {
 
   const nextPage = () => {
     if (queryInfo?.next) {
+      setPage(page + 1)
       getCharactersList(queryInfo.next)
     }
   }
 
   const previousPage = () => {
     if (queryInfo?.prev) {
+      setPage(page - 1)
       getCharactersList(queryInfo.next)
     }
   }
@@ -52,8 +55,12 @@ export const useGetCharactersList = () => {
   return {
     charactersList,
     loadingCharactersList,
-    previousPage,
-    nextPage,
-    visualizationStatistics
+    visualizationStatistics,
+    paginate: {
+      previousPage,
+      nextPage,
+      ...queryInfo,
+      page
+    }
   }
 }

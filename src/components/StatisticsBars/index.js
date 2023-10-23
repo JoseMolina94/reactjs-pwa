@@ -109,6 +109,6 @@ export const StatisticsBars = (props) => {
   }, [data]);
 
   return (
-    <div id="chartdiv" style={{ width: '100%', height: '280px', overflow: 'auto' }} />
+    <div id="chartdiv" style={{ width: '100%', height: '250px', overflow: 'auto' }} />
   )
 }

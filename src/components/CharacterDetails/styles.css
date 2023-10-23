@@ -6,7 +6,7 @@
 }
 
 .character-info-container {
-    border: 1px solid gray;
+    border: 1px solid lightgrey;
     border-radius: 10px;
     padding: 10px;
 }
@@ -21,7 +21,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 200px;
+    justify-self: center;
+    width: 150px;
 }
 
 .character-info h2 {
@@ -37,7 +38,7 @@
 }
 
 .details-section-header {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid lightgray;
     display: flex;
     align-items: center;
     gap: 10px;
