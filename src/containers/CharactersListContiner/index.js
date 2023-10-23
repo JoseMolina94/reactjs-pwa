@@ -3,6 +3,7 @@ import {CharactersList} from "../../components/CharactersList"
 import {useGetCharactersList} from "../../hooks/useGetCharactersList"
 import { CharacterDetails } from "../../components/CharacterDetails"
 import { PageHeader } from "../../components/Commons/PageHeader"
+import { useScreenDimensions } from "../../hooks/useScreenDimensions";
 
 export const CharactersListContainer = () => {
   const {
@@ -12,6 +13,7 @@ export const CharactersListContainer = () => {
     paginate
   } = useGetCharactersList()
   const [characterSelected, setCharacterSelected] = useState(null)
+  const { width } = useScreenDimensions()
 
   const closeDetailsSection = () => {
     setCharacterSelected(null)
@@ -25,28 +27,54 @@ export const CharactersListContainer = () => {
     <div>
       <PageHeader title="Rick and Morty Characters" />
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: !characterSelected ? '1fr' : '1fr 0.5fr'
-        }}
-      >
-        <CharactersList
-          characters={charactersList}
-          loading={loadingCharactersList}
-          setCharacterSelected={setCharacterSelected}
-          paginate={paginate}
-        />
+      {
+        width >= 1000
+          ? <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: !characterSelected ? '1fr' : '1fr 0.5fr'
+            }}
+          >
+            <CharactersList
+              characters={charactersList}
+              loading={loadingCharactersList}
+              setCharacterSelected={setCharacterSelected}
+              paginate={paginate}
+            />
 
-        {
-          characterSelected &&
-          <CharacterDetails
-            character={characterSelected}
-            closeFunc={closeDetailsSection}
-            visualizationStatistics={visualizationStatistics}
-          />
-        }
-      </div>
+            {
+              characterSelected &&
+              <CharacterDetails
+                character={characterSelected}
+                closeFunc={closeDetailsSection}
+                visualizationStatistics={visualizationStatistics}
+              />
+            }
+          </div>
+          : <div
+            style={{
+              display: 'grid',
+              gridTemplateRows: !characterSelected ? '1fr' : 'auto 1fr'
+            }}
+          >
+            {
+              characterSelected &&
+              <CharacterDetails
+                character={characterSelected}
+                closeFunc={closeDetailsSection}
+                visualizationStatistics={visualizationStatistics}
+              />
+            }
+
+            <CharactersList
+              characters={charactersList}
+              loading={loadingCharactersList}
+              setCharacterSelected={setCharacterSelected}
+              paginate={paginate}
+            />
+          </div>
+      }
+
     </div>
   )
 }

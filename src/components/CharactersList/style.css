@@ -44,3 +44,16 @@
     background: gray;
     border-radius: 100%;
 }
+
+@media (max-width: 1000px) {
+    .container {
+        max-height: 100%;
+    }
+}
+
+@media (max-width: 670px) {
+    .characters-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-auto-rows: 250px;
+    }
+}
