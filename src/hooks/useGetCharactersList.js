@@ -7,6 +7,7 @@ export const useGetCharactersList = () => {
   const [queryInfo, setQueryInfo] = useState({})
   const [page, setPage] = useState(1)
   const [loadingCharactersList, setLoadingCharactersList] = useState(true)
+  const [error, setError] = useState(null)
   const initialURL = "https://rickandmortyapi.com/api/character"
 
   const getCharactersList = async (url = initialURL) => {
@@ -15,22 +16,25 @@ export const useGetCharactersList = () => {
       await fetch(url)
         .then(response => response.json())
         .then(data => {
-          setQueryInfo(data.info)
-          setCharactersList(data.results)
+          if (data?.error) {
+            throw new Error(data.error)
+          } else {
+            setQueryInfo(data.info)
+            setCharactersList(data.results)
 
-          setVisualizationStatitics(
-            getVisualizationStatistics({
-              dataArray: data.results,
-              name: 'visualization',
-              value: 'episode'
-            })
-          )
-
+            setVisualizationStatitics(
+              getVisualizationStatistics({
+                dataArray: data.results,
+                name: 'visualization',
+                value: 'episode'
+              })
+            )
+          }
           setLoadingCharactersList(false)
         })
     } catch (e) {
       setLoadingCharactersList(false)
-      console.log(e)
+      setError(e)
     }
   }
 
@@ -61,6 +65,7 @@ export const useGetCharactersList = () => {
       nextPage,
       ...queryInfo,
       page
-    }
+    },
+    error
   }
 }

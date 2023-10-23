@@ -10,7 +10,6 @@ export const getVisualizationStatistics = ({
   name = 'data',
   value = 'data'
 }) => {
-  console.log(dataArray)
   let response = []
   for (const item of dataArray) {
     response.push({

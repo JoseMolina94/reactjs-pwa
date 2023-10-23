@@ -10,6 +10,7 @@ export const useScreenDimensions = () => {
   }
 
   useEffect(() => {
+    handleResize() //to init states...
     window.addEventListener("resize", handleResize)
 
     return () => {
